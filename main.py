@@ -42,3 +42,23 @@ def desvioPA(lista):
 t = 0
 m1 = tipdesviop(tipo = t, lista = lista1)
 print('O desvio padrão amostral é:',m1)
+
+#transformando a lista de dados em array para melhor utilização da função qqplot
+array_dados = np.array(lista1)
+qqplot_data = qqplot(array_dados, line = "s").gca().lines
+
+#no plotly
+fig = go.Figure()
+
+#adicionando dados
+fig.add_trace(go.Scatter(x = qqplot_data[0].get_xdata(), y = qqplot_data[0].get_ydata(),mode = "markers", marker = dict(color="blue")))
+
+#adicionando linha normal
+fig.add_trace(go.Scatter(x = qqplot_data[1].get_xdata(), y = qqplot_data[1].get_ydata(),mode = "lines", marker = dict(color="red")))
+
+#atualizando titulos
+fig.update_layout(title="Gráfico Quantil-Quantil",
+                  xaxis = dict(title="Quantis teóricos da distrubuição normal padrão"), 
+                  yaxis = dict(title="Quantis observados da amostra"), showlegend = False)
+
+fig.show()
