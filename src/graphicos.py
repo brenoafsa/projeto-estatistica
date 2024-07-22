@@ -4,13 +4,13 @@ import seaborn as sns
 
 def get_boxplot(data):
     plt.boxplot(data)
-    plt.title("Testando código")
-    plt.ylabel("Banda Larga")
+    plt.title("Transferência de Dados do SSD")
+    plt.ylabel("Velocidade (Mb/s)")
     return plt.show()
 
 def get_histograma(data):
     ax = sns.histplot(data, kde=True)
-    ax.set(title="Velocidade Internet em MB X Frequência", xlabel="Velocidade", ylabel="Frequência")
+    ax.set(title="Transferência de Dados do SSD X Frequência", xlabel="Velocidade (Mb/s)", ylabel="Frequência")
     return plt.show()
 
 def get_linechart(data):
@@ -18,9 +18,9 @@ def get_linechart(data):
     for i in range(len(data)):
         x.append(i*5)
     plt.plot(x, data, linewidth=0.9)
-    plt.title("Gráfico temporal da Velocidade de Internet")
+    plt.title("Gráfico temporal do Desempenho da transferência de dados do SSD")
     plt.xlabel('Tempo (s)')
-    plt.ylabel('Velocidade')
+    plt.ylabel('Velocidade (Mb)')
     return plt.show()
 
 box_plot = get_boxplot(mtbf_lista)
