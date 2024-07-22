@@ -1,72 +1,27 @@
 from main_info import *
-import math
-import scipy.stats as stats
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import norm
+import scipy.stats as stats
 
-x_bar = media
-u = 70
-std = dp
-n = 1000
+hipotese_nula = 25000
+
+stat, p_value = stats.wilcoxon(mtbf_lista, alternative='two-sided')
+print("Estatística do teste U de Mann-Whitney:", stat)
+print("Valor-p do teste U de Mann-Whitney:", p_value)
+
 alpha = 0.05
-
-# tipos possíveis: "right-tailed, left-tailed, two-tailed"
-tail_hypothesis_type = "right-tailed"
-
-if tail_hypothesis_type == "left-tailed":
-    critical_value = stats.norm.ppf(alpha)
-elif tail_hypothesis_type == "right-tailed":
-    critical_value = stats.norm.ppf(1 - alpha)
+if p_value > alpha:
+    print("Aceitamos H0")
 else:
-    critical_value = stats.norm.ppf(alpha/2)
+    print("Rejeitamos H0")
 
-
-print("One-Sample", tail_hypothesis_type, "Z-test of true mean")
-print("--------------------------------------------------------------------------------------")
-
-if n >= 30:
-    print("Tamanho da Amostra >= 30, CLT ")
-    z_score = (x_bar - u)/(std/math.sqrt(n))
-    critical_value = stats.norm.ppf(alpha)
-    
-    conclusion = "Falha ao rejeitar a hipótese nula"
-    if tail_hypothesis_type == "left-tailed":
-        if z_score < critical_value:
-            conclusion = "Hipótese Nula foi rejeitada"
-    elif tail_hypothesis_type == "right-tailed":
-        critical_value = abs(critical_value)
-        if z_score > critical_value:
-            conclusion = "Hipótese Nula foi rejeitada"
-    else:
-        z_score = abs(z_score) 
-        critical_value = abs(critical_value)
-        if z_score > critical_value:
-            conclusion = "Hipótese Nula foi rejeitada"
-
-    print("z-score is:", z_score, " and critical value is:", critical_value)
-    print(conclusion)
-else:
-    print("CLT não foi satisfeita")
-
-mu = 70
-sigma = dp
-
-x = np.linspace(mu - 3*sigma, mu + 3*sigma, 100)
-
-y = norm.pdf(x, mu, sigma)
-
-plt.plot(x, y)
-
-plt.xlim(mu - 3*sigma, mu + 3*sigma)
-
-x1 = np.linspace(mu + 3*sigma, -1.645*sigma, 100)
-x2 = np.linspace(79.62, 1.645*sigma, 100)
-y1 = norm.pdf(x1, mu, sigma)
-y2 = norm.pdf(x2, mu, sigma)
-plt.fill_between(x1, y1, color='red', alpha=.3)
-plt.fill_between(x2, y2, color='white', alpha=1)
-
-plt.title('Distribuição Normal')
-
+plt.figure(figsize=(8, 6))
+plt.hist(mtbf_lista, bins=10, edgecolor='black', alpha=0.7)
+plt.axvline(x=np.mean(mtbf_lista), color='red', linestyle='--', linewidth=1.5, label='Média dos dados')
+plt.axvline(x=hipotese_nula, color='blue', linestyle='--', linewidth=1.5, label='Hipótese Nula: 25000 MB/s')
+plt.title("Histograma de Transferência de Dados do SSD")
+plt.xlabel("Transferência de Dados (MB/s)")
+plt.ylabel("Frequência")
+plt.legend()
+plt.grid(False)
 plt.show()

@@ -1,7 +1,6 @@
 from main_info import *
 import matplotlib.pyplot as plt 
 import seaborn as sns
-import matplotlib.pyplot as plt
 
 def get_boxplot(data):
     plt.boxplot(data)
